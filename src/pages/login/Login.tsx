@@ -33,14 +33,14 @@ const Login: React.FC = () => {
             className="mx-auto h-10 w-auto"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Ingresa en tu cuenta
+            {'Ingresa en tu cuenta'}
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form action="#" method="POST" className="space-y-6">
             <div>
-              <Label htmlFor="user">Usuario:</Label>
+              <Label htmlFor="user">{'Usuario:'}</Label>
               <div className="mt-2">
                 <Input name="user" type="text" />
               </div>
@@ -48,14 +48,14 @@ const Login: React.FC = () => {
 
             <div>
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Clave:</Label>
+                <Label htmlFor="password">{'Clave:'}</Label>
                 <div className="text-sm">
                   <Link
                     onClick={() => {
                       navigate('/forgotPassword');
                     }}
                   >
-                    Olvidaste tu clave?
+                    {'Olvidaste tu clave?'}
                   </Link>
                 </div>
               </div>
@@ -65,18 +65,18 @@ const Login: React.FC = () => {
             </div>
 
             <div>
-              <Button>Login</Button>
+              <Button>{'Login'}</Button>
             </div>
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Ya tienes cuenta?{' '}
+            {'Ya tienes cuenta? '}
             <Link
               onClick={() => {
                 navigate('/register');
               }}
             >
-              registra tu cuenta
+              {'registra tu cuenta'}
             </Link>
           </p>
         </div>
