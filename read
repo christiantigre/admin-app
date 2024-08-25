@@ -1,0 +1,10 @@
+generadores de codigo
+npm install --save-dev hygen
+npm install --save-dev plop
+
+
+hygen component new --name avatar
+hygen component new --name avatar
+
+test 1
+npx hygen component new --name MyComponent
