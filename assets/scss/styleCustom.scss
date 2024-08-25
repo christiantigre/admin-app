@@ -1,16 +1,9 @@
-@tailwind base;
-
-@tailwind components;
-
-@tailwind utilities;
-
 .footer {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #f8f9fa;
-  /* Cambia el color de fondo según sea necesario */
+  background-color: #f8f9fa; /* Cambia el color de fondo según sea necesario */
   text-align: center;
   padding: 10px 0;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);

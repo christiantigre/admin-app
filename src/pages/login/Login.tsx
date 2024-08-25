@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { useNavigate } from 'react-router-dom';
 import { Input } from '../../components/ui/Input/Input';
 import { Label } from '../../components/ui/Label/Label';
@@ -9,14 +8,6 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   return (
     <>
-      <button
-        onClick={() => {
-          navigate('/home');
-        }}
-      >
-        Home
-      </button>
-      <h1>Login Page</h1>
       {/*
         This example requires updating your template:
 
