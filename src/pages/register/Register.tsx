@@ -4,6 +4,7 @@ import { Input } from '../../components/ui/Input/Input';
 import { Label } from '../../components/ui/Label/Label';
 import { Button } from '../../components/ui/Button/Button';
 import { Link } from '../../components/ui/Link/Link';
+import { RoutesModulo } from '../../enum/enum';
 const Register: React.FC = () => {
   const navigate = useNavigate();
   return (
@@ -71,7 +72,7 @@ const Register: React.FC = () => {
             {'Ya tengo una cuenta '}
             <Link
               onClick={() => {
-                navigate('/login');
+                navigate(RoutesModulo.LOGIN);
               }}
             >
               {'ingresar a mi cuenta'}

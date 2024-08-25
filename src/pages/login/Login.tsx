@@ -4,6 +4,7 @@ import { Input } from '../../components/ui/Input/Input';
 import { Label } from '../../components/ui/Label/Label';
 import { Button } from '../../components/ui/Button/Button';
 import { Link } from '../../components/ui/Link/Link';
+import { RoutesModulo } from '../../enum/enum';
 const Login: React.FC = () => {
   const navigate = useNavigate();
   return (
@@ -43,7 +44,7 @@ const Login: React.FC = () => {
                 <div className="text-sm">
                   <Link
                     onClick={() => {
-                      navigate('/forgotPassword');
+                      navigate(RoutesModulo.PASSWORD_RESET);
                     }}
                   >
                     {'Olvidaste tu clave?'}
@@ -64,7 +65,7 @@ const Login: React.FC = () => {
             {'Ya tienes cuenta? '}
             <Link
               onClick={() => {
-                navigate('/register');
+                navigate(RoutesModulo.REGISTER);
               }}
             >
               {'registra tu cuenta'}
