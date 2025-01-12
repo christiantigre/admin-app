@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { post } from './request/request.service';
 
-export const loginService = { login, getUser, logout };
+export const loginService = { login, getUser, logout, create };
 
 const API_BASE_URL = 'https://your-api-domain.com/api'; // Reemplaza con tu URL base
 
@@ -34,6 +34,23 @@ const api = axios.create({
 async function  login  (credentials: LoginRequest): Promise<LoginResponse>  {
   try {
     const response = await post<LoginResponse>('/login', credentials as unknown as Record<string, unknown>);
+
+    return response.data;
+  } catch (error: any) {
+
+    if (error && error.response) {
+      // Manejar errores de la API
+      throw new Error(error.response.data.message || 'Error al iniciar sesión');
+    } else {
+      // Manejar errores de red
+      throw new Error('No se pudo conectar al servidor');
+    }
+  }
+};
+
+async function  create  (credentials: LoginRequest): Promise<LoginResponse>  {
+  try {
+    const response = await post<LoginResponse>('/register', credentials as unknown as Record<string, unknown>);
 
     return response.data;
   } catch (error: any) {

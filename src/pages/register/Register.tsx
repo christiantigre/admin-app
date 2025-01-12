@@ -1,22 +1,66 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Input } from '../../components/ui/Input/Input';
 import { Label } from '../../components/ui/Label/Label';
 import { Button } from '../../components/ui/Button/Button';
 import { Link } from '../../components/ui/Link/Link';
 import { RoutesModulo } from '../../enum/enum';
+import { loginService } from '../../services/login/login.services';
+
+// Definir los tipos para los valores del formulario de registro
+interface RegisterRequest {
+  name: string;
+  email: string;
+  contact: string;
+  password: string;
+  password_confirmation: string;
+}
+
 const Register: React.FC = () => {
   const navigate = useNavigate();
+
+  // Estado para almacenar los valores del formulario
+  const [formData, setFormData] = useState<RegisterRequest>({
+    name: '',
+    email: '',
+    contact: '',
+    password: '',
+    password_confirmation: '',
+  });
+
+  // Manejar los cambios en los inputs
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Función para registrar el usuario
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+
+    // Validar que las contraseñas coincidan
+    if (formData.password !== formData.password_confirmation) {
+      alert('Las contraseñas no coinciden');
+      return;
+    }
+
+    try {
+      // Enviar los datos a la API de registro
+      await loginService.create(formData);
+
+      // Redirigir al login después de un registro exitoso
+      navigate(RoutesModulo.LOGIN);
+    } catch (error) {
+      console.error('Error al registrar el usuario:', error);
+      alert('Hubo un error al registrar la cuenta. Intenta nuevamente.');
+    }
+  };
+
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-white">
-        <body class="h-full">
-        ```
-      */}
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
@@ -30,41 +74,73 @@ const Register: React.FC = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
-            <div>
-              <Label htmlFor="user">{'Correo:'}</Label>
+          <form onSubmit={handleRegister} className="space-y-6">
+          <div>
+              <Label htmlFor="email">{'Nombre:'}</Label>
               <div className="mt-2">
-                <Input name="user" type="text" />
+                <Input
+                  name="name"
+                  type="string"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="email">{'Correo:'}</Label>
+              <div className="mt-2">
+                <Input
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
             </div>
 
             <div>
-              <Label htmlFor="user">{'Telefono:'}</Label>
+              <Label htmlFor="contact">{'Telefono:'}</Label>
               <div className="mt-2">
-                <Input name="user" type="text" />
+                <Input
+                  name="contact"
+                  type="text"
+                  value={formData.contact}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">{'Clave:'}</Label>
-              </div>
+              <Label htmlFor="password">{'Clave:'}</Label>
               <div className="mt-2">
-                <Input name="password" type="password" />
+                <Input
+                  name="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">{'Confirmar Clave:'}</Label>
-              </div>
+              <Label htmlFor="password_confirmation">{'Confirmar Clave:'}</Label>
               <div className="mt-2">
-                <Input name="password" type="password" />
+                <Input
+                  name="password_confirmation"
+                  type="password"
+                  value={formData.password_confirmation}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
             </div>
 
             <div>
-              <Button>{'Registrar'}</Button>
+              <Button type="submit">{'Registrar'}</Button>
             </div>
           </form>
 
