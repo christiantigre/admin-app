@@ -6,6 +6,7 @@ import AuthLayout from '../layouts/AuthLayout';
 import ForgotPassword from '../pages/forgotPassword/ForgotPassword';
 import Register from '../pages/register/Register';
 import { RoutesModulo } from '../enum/enum';
+import LayoutTemplate from '../layouts/MainLayout';
 
 const Main: React.FunctionComponent = () => {
   return (
@@ -15,6 +16,8 @@ const Main: React.FunctionComponent = () => {
         <Route path={ RoutesModulo.LOGIN} element={<Login />} />
         <Route path={ RoutesModulo.PASSWORD_RESET} element={<ForgotPassword />} />
         <Route path={ RoutesModulo.REGISTER} element={<Register />} />
+      </Route>
+      <Route element={<LayoutTemplate />}>
         <Route path="/home" element={<Home />} />
       </Route>
     </Routes>

@@ -1,4 +1,8 @@
 {
+  "compilerOptions": {
+    "strict": false,       // Desactiva la opción estricta para permitir `any`
+    "noImplicitAny": false // Permite el uso de `any` sin error
+  },
   "files": [],
   "references": [
     {
