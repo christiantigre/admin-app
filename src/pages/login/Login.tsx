@@ -1,127 +1,132 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { Input } from '../../components/ui/Input/Input';
 import { Label } from '../../components/ui/Label/Label';
 import { Button } from '../../components/ui/Button/Button';
 import { Link } from '../../components/ui/Link/Link';
 import { RoutesModulo } from '../../enum/enum';
 import { loginService } from '../../services/login/login.services';
-
-// Definir tipos para los valores de login
-interface LoginRequest {
-  user: string;
-  password: string;
-}
+import { showNotification } from '../../services/notify/notify.service';
+import  Loader  from '../../components/ui/Loader/Loaders';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-
-  // Estado para almacenar los valores de los inputs
-  const [credentials, setCredentials] = useState<LoginRequest>({
-    user: '',
-    password: '',
+  const [loading, setLoading] = React.useState(true);
+  // Esquema de validación con Yup
+  const validationSchema = Yup.object({
+    user: Yup.string()
+      .email('El formato del correo es inválido.')
+      .required('El correo electrónico es requerido.'),
+    password: Yup.string()
+      .min(6, 'La contraseña debe tener al menos 6 caracteres.')
+      .required('La contraseña es requerida.'),
   });
 
-  // Función de callback para manejar el login
-  const handleLogin = async () => {
-    try {
-      // Aquí puedes agregar tu lógica para enviar los datos a la API, por ejemplo:
-       await loginService.login({
-        email: credentials.user,
-        password: credentials.password,
-      });
-      // Redirigir a la página de inicio después de un login exitoso
-      navigate(RoutesModulo.HOME);
-    } catch (error) {
-      console.error('Error en login', error);
-      // Aquí puedes manejar los errores de login
-    }
-  };
-
-  // Función para manejar cambios en los inputs
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setCredentials((prevCredentials) => ({
-      ...prevCredentials,
-      [name]: value,
-    }));
-  };
+  // Formik para manejar el formulario
+  const formik = useFormik({
+    initialValues: {
+      user: '',
+      password: '',
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      try {
+        await loginService.login({
+          email: values.user,
+          password: values.password,
+        });
+        showNotification('Acceso correcto.', 'success');
+        navigate(RoutesModulo.HOME);
+      } catch (error) {
+        showNotification('Error en login: ' + JSON.stringify(error), 'error');
+        console.error('Error en login', error);
+      }
+    },
+  });
 
   return (
-    <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            alt="IAFact"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            className="mx-auto h-10 w-auto"
-          />
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            {'Ingresa en tu cuenta'}
-          </h2>
-        </div>
-
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault(); // Prevenir el envío del formulario
-              handleLogin(); // Llamar a la función de login
-            }}
-            className="space-y-6"
-          >
-            <div>
-              <Label htmlFor="user">{'Usuario:'}</Label>
-              <div className="mt-2">
-                <Input
-                  name="user"
-                  type="text"
-                  value={credentials.user}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">{'Clave:'}</Label>
-                <div className="text-sm">
-                  <Link
-                    onClick={() => {
-                      navigate(RoutesModulo.PASSWORD_RESET);
-                    }}
-                  >
-                    {'Olvidaste tu clave?'}
-                  </Link>
-                </div>
-              </div>
-              <div className="mt-2">
-                <Input
-                  name="password"
-                  type="password"
-                  value={credentials.password}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-
-            <div>
-              <Button type="submit">{'Login'}</Button>
-            </div>
-          </form>
-
-          <p className="mt-10 text-center text-sm text-gray-500">
-            {'Ya tienes cuenta? '}
-            <Link
-              onClick={() => {
-                navigate(RoutesModulo.REGISTER);
-              }}
-            >
-              {'registra tu cuenta'}
-            </Link>
-          </p>
-        </div>
+    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <img
+          alt="IAFact"
+          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+          className="mx-auto h-10 w-auto"
+        />
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          {'Ingresa en tu cuenta'}
+        </h2>
       </div>
-    </>
+       <Loader isOpen={loading} />
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form onSubmit={formik.handleSubmit} className="space-y-6">
+          <div>
+            <Label htmlFor="user">{'Usuario:'}</Label>
+            <div className="mt-2">
+              <Input
+                name="user"
+                type="text"
+                value={formik.values.user}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.user && Boolean(formik.errors.user)}
+              />
+              {formik.touched.user && formik.errors.user && (
+                <p className="mt-2 text-sm text-red-600">
+                  <span className="font-medium">{formik.errors.user}</span>
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password">{'Clave:'}</Label>
+              <div className="text-sm">
+                <Link
+                  onClick={() => {
+                    navigate(RoutesModulo.PASSWORD_RESET);
+                  }}
+                >
+                  {'Olvidaste tu clave?'}
+                </Link>
+              </div>
+            </div>
+            <div className="mt-2">
+              <Input
+                name="password"
+                type="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.password && Boolean(formik.errors.password)}
+              />
+              {formik.touched.password && formik.errors.password && (
+                <p className="mt-2 text-sm text-red-600">
+                  <span className="font-medium">{formik.errors.password}</span>
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <Button type="submit">{'Login'}</Button>
+          </div>
+        </form>
+
+        <p className="mt-10 text-center text-sm text-gray-500">
+          {'¿No tienes una cuenta? '}
+          <Link
+            onClick={() => {
+              navigate(RoutesModulo.REGISTER);
+            }}
+          >
+            {'Regístrate aquí'}
+          </Link>
+        </p>
+      </div>
+    </div>
   );
 };
 
