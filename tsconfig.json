@@ -1,15 +1,7 @@
 {
-  "compilerOptions": {
-    "strict": false,       // Desactiva la opción estricta para permitir `any`
-    "noImplicitAny": false // Permite el uso de `any` sin error
-  },
   "files": [],
   "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.node.json"
-    }
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
   ]
 }
