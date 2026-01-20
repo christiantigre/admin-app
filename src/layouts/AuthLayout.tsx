@@ -1,29 +1,14 @@
 import React from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import styles from './AuthLayout.module.scss';
+import { Outlet } from 'react-router-dom';
 
 const AuthLayout: React.FC = () => {
-  const navigate = useNavigate();
   return (
-    <div className={styles.authLayout}>
-      <header>
-        <h1>My App</h1>
-        {/* Puedes agregar un encabezado o logo aquí */}
-      </header>
-      <main>
-        <button
-          onClick={() => {
-            navigate('/login');
-          }}
-        >
-          Lon in
-        </button>
+    <div className="relative min-h-screen w-full">
+      <Outlet />
 
-        <Outlet />
-      </main>
-      <footer>
+      <footer className="footer">
         {/* Puedes agregar un pie de página aquí */}
-        <p>&copy; 2024 My App</p>
+        <p>&copy; 2025 My App</p>
       </footer>
     </div>
   );

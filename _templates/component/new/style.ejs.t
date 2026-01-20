@@ -1,3 +1,0 @@
-.<%= camelCaseName %> {
-  /* Estilos del componente */
-}
